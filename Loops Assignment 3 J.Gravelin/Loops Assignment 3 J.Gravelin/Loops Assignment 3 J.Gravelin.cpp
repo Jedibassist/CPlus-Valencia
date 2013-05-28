@@ -64,13 +64,16 @@ void main(){
 			cout << "That was a bit too high, try again." << endl
 				<< "You have " << (9 - i) << " guesses left. Good Luck!"  << endl;
 		}else{
-			cout << "That was a bit too low, try again." << endl
-				<< "You have " << (9 - i) << " guesses left. Good Luck!"  << endl;
+			if((9 - i) == 0){
+				cout << endl << "You are all out of guesses, sorry but you lose!" << endl;
+			}else{
+					cout << "That was a bit too low, try again." << endl
+						<< "You have " << (9 - i) << " guesses left. Good Luck!"  << endl;
+			}
 		}
 	}
 
-	cout << "Guess		: " << guess << endl
-		<< "Winning number	: " << winningNumber << endl;
+	cout << "Winning number	: " << winningNumber << endl;
 
 	system("pause");
 }
