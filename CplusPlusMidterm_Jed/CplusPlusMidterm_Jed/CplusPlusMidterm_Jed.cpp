@@ -16,7 +16,6 @@ public:
 	double ticketprice;
 	Event();
 	Event(string name, string type, int capacity, double ticketprice);
-
 };
 
 // Default Constructor
@@ -104,12 +103,13 @@ void list_events(Event events[], Customer cus){
 		cout << endl;
 		cout << "5: Complete Order" << endl;
 		cout << "6: Cancel a Ticket" << endl;
+		cout << "7: Exit Program" << endl;
 
 		// Will break if this is not an int
 		// TODO: Fix that!
 		int choice;
 		cin >> choice;
-		while(choice < 1 || choice > 6){
+		while(choice < 1 || choice > 7){
 			cout << "That's an invalid choice. Please choose from the above Menu.";
 			cin >> choice;
 		}
@@ -123,6 +123,9 @@ void list_events(Event events[], Customer cus){
 		}else if(choice == 6){
 			// GoTo cancel order if 6
 			cancel_order(events, cus);
+		}else if(choice == 7){
+			// Show Ticketholders / Exit Program
+			// This will happen on exit by default
 		}
 	}
 }
@@ -384,7 +387,9 @@ void print_ticketHolders(Event events[]){
 		cout << "Event Name: " << events[i].name << endl;
 		cout << "TicketHolders: " << endl;
 		for(j = 0; j <(sizeof(events[i].attendees)) / sizeof(string); j++){
-			cout << "\t" << events[i].attendees[j] << endl;
+			if(events[i].attendees[j].size() > 0){
+				cout << "\t" << events[i].attendees[j] << endl;
+			}
 		}
 	}
 }
