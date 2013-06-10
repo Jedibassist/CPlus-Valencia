@@ -357,6 +357,7 @@ void cancel_order(Event events[], Customer cus){
 	cin.ignore();
 	getline(cin, name);
 
+	bool cancelled = false;
 	// Main Logic. Find the user, clear them out.
 	// Then check the waitingList for any users. If one is there, give them the spot.
 	for(h = 0; h < tickets; h++){
@@ -365,6 +366,7 @@ void cancel_order(Event events[], Customer cus){
 				cout << name << ", your ticket for "
 					<< events[selection].name << " has been cancelled." << endl;
 				events[selection].attendees[i].clear();
+				cancelled = true;
 				for(j = 0; j < (sizeof(events[selection].waitingList)) / sizeof(string); j++){
 					if(events[selection].waitingList[j].size() > 0){
 						events[selection].attendees[i] = events[selection].waitingList[j];
@@ -375,6 +377,10 @@ void cancel_order(Event events[], Customer cus){
 				}
 			}
 		}
+	}
+
+	if(cancelled){
+		cout << "You did not seem to have a ticket to that event" << endl;
 	}
 	// Return to main Menu
 	list_events(events, cus);
