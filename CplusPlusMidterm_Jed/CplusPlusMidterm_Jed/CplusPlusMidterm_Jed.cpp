@@ -379,7 +379,7 @@ void cancel_order(Event events[], Customer cus){
 		}
 	}
 
-	if(cancelled){
+	if(!cancelled){
 		cout << "You did not seem to have a ticket to that event" << endl;
 	}
 	// Return to main Menu
