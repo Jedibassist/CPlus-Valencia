@@ -5,14 +5,7 @@
 
 const double TAX = 1.06;
 
-class Arena{
-public:
-	static const int capacity = 10;
-	Arena();
-};
-
-Arena::Arena(){ /* Default */ };
-
+// Creating a Class for the Events
 class Event{
 public:
 	string name;
@@ -26,8 +19,10 @@ public:
 
 };
 
+// Default Constructor
 Event::Event(){};
 
+// Main Constructor
 Event::Event(string e_name, string e_type, int e_capacity, double e_ticketprice){
 	name = e_name;
 	type = e_type;
@@ -35,6 +30,8 @@ Event::Event(string e_name, string e_type, int e_capacity, double e_ticketprice)
 	ticketprice = e_ticketprice;
 };
 
+// Creating a Class for the customer
+// Played around a bit with encapsulated variables / functions
 class Customer{
 private:
 	string name;
@@ -64,7 +61,7 @@ void print_ticketHolders(Event events[]);
 
 void main()
 {
-	Arena AmwayCenter;
+	// Creating an array of Events, and populating.
 	Event events[4];
 	events[0] = Event("Solar Bears Hockey Game", "Sports", 10, 25);
 	events[1] = Event("Tina Turner Concert", "Concert", 5, 50);
@@ -81,13 +78,15 @@ void main()
 	system("pause");
 }
 
+// Says Hello
 void welcome_msg(){
 	cout << "Welcome to the Amway Arena!" << endl;
 };
 
+// The main function, that will ask what the Customer would like to do
+// Pointers to the current customer and the events being passed in
 void list_events(Event events[], Customer cus){
-	cout << "Which of the following events are you interested in?" << endl << endl;
-	// Loop through and ask about the events
+	// Check to see if we are sold out
 	int i;
 	int freeTickets = 0;
 	for(i = 0; i < sizeof(events); i++){
@@ -97,6 +96,8 @@ void list_events(Event events[], Customer cus){
 	if(freeTickets == 0){
 		cout << "There are no more tickets Left! Sorry!" << endl;
 	}else{
+		cout << "Which of the following events are you interested in?" << endl << endl;
+		// Loop through and ask about the events
 		for(i = 0; i < sizeof(events); i++){
 			cout << i + 1 << ": " << events[i].name << endl;
 		}
@@ -105,7 +106,7 @@ void list_events(Event events[], Customer cus){
 		cout << "6: Cancel a Ticket" << endl;
 
 		// Will break if this is not an int
-		// TODO: Fix that shit
+		// TODO: Fix that!
 		int choice;
 		cin >> choice;
 		while(choice < 1 || choice > 6){
@@ -114,15 +115,23 @@ void list_events(Event events[], Customer cus){
 		}
 
 		if(choice < 5){
+			// GoTo ticket prompt if 1-4
 			ticket_prompt(events, choice - 1, cus);
 		}else if(choice == 5){
+			// GoTo complete order if 5
 			complete_order(events, cus);
 		}else if(choice == 6){
+			// GoTo cancel order if 6
 			cancel_order(events, cus);
 		}
 	}
 }
 
+// This will ask the user how many tickets they would like to purchase.
+// Takes in a pointer to the Event array and Customer, and an int for the menu selection.
+//
+// There are several checks in here to see if the user has asked for tickets to a sold out event.
+// If so, they will be asked to put on teh waiting list.
 void ticket_prompt(Event events[], int selection, Customer cus){
 	cout << "You have chosen the Event: \n\t" << events[selection].name << endl << endl;
 	cout << "Tickets are $" << events[selection].ticketprice << " a peice." << endl;
@@ -145,7 +154,6 @@ void ticket_prompt(Event events[], int selection, Customer cus){
 			// Only letting them reserve one...
 			i_choice = 1;
 		}
-
 		
 		while(i_choice < 1 || i_choice > 2){
 			cout << "That's an invalid choice. Would you like 1 or 2 tickets?  ";
@@ -160,6 +168,8 @@ void ticket_prompt(Event events[], int selection, Customer cus){
 	}
 }
 
+// This will go through with assigning a ticket slot to the User
+// Takes in pointers to the Event Array and customer, and ints for the event menu selection and tickets ordered
 void buy_tickets(Event events[], int selection, int tickets, Customer cus){
 	string name;
 	cout << "Please enter your name: ";
@@ -168,11 +178,13 @@ void buy_tickets(Event events[], int selection, int tickets, Customer cus){
 	if(cus.getName().compare(name) == 0){
 		// Same customer. Do nothing.
 	}else{
+		// Different Customer. Reset Class.
 		cus = Customer();
 		cus.setName(name);
 		cus.total = 0;
 	}
 
+	// Let's make sure this user isn't trying to buy more than 2 tickets
 	bool canbuy = true;
 	int i, j;
 	int ticketCount = 0;
@@ -198,12 +210,15 @@ void buy_tickets(Event events[], int selection, int tickets, Customer cus){
 		}
 	}
 
+	// Catch them if they have bought 1, and only allow for one more ticket to be bought.
 	if(ticketCount == 1 && tickets == 2){
 		cout << "You have already purchased one ticket, so you can only buy one more." << endl
 			<< "Sorry for any inconvenience." << endl;
 		tickets = 1;
 	}
 
+
+	// Normal buying procedure. Tickets are available.
 	if(canbuy && events[selection].capacity > 0){
 		cout << "Thanks " << name << ". Your total with tax for " << tickets 
 			<< " ticket(s) is: $" << events[selection].ticketprice * tickets * TAX;
@@ -222,6 +237,8 @@ void buy_tickets(Event events[], int selection, int tickets, Customer cus){
 		int choice;
 		cin >> choice;
 
+		// The nitty-gritty stuff.
+		// Setting all the of the variables in the pointed arrays.
 		switch(choice){
 		case 1:
 			events[selection].capacity -= tickets;
@@ -258,6 +275,7 @@ void buy_tickets(Event events[], int selection, int tickets, Customer cus){
 			list_events(events, cus);
 			break;
 		}
+	// This executes if a user has chosen to be added to the waiting list.
 	}else if(canbuy && events[selection].capacity < 1){
 		cout << "Thanks " << name << ". You have been added to the waiting list." << endl << endl;
 
@@ -275,6 +293,8 @@ void buy_tickets(Event events[], int selection, int tickets, Customer cus){
 	}
 }
 
+// Called to complete the order.
+// Takes in pointers to the Event array and customer
 void complete_order(Event events[], Customer cus){
 	cout << "Your total is: $" << cus.total;
 	if((int)((cus.total) * 100) % 100 == 0){
@@ -303,6 +323,11 @@ void complete_order(Event events[], Customer cus){
 	}
 }
 
+// Allows a user to cancel an order
+// Takes in pointers to the Event array and customer
+//
+// This will AUTOMATICALLY look at the waiting list.
+// If a user is there, they will take the cancellation's spot instantly.
 void cancel_order(Event events[], Customer cus){
 	cout << "Which of the following events are cancelling your order for?" << endl << endl;
 	// Loop through and ask about the events
@@ -329,6 +354,8 @@ void cancel_order(Event events[], Customer cus){
 	cin.ignore();
 	getline(cin, name);
 
+	// Main Logic. Find the user, clear them out.
+	// Then check the waitingList for any users. If one is there, give them the spot.
 	for(h = 0; h < tickets; h++){
 		for(i = 0; i < (sizeof(events[selection].attendees)) / sizeof(string); i++){
 			if(events[selection].attendees[i].compare(name) == 0){
@@ -350,6 +377,7 @@ void cancel_order(Event events[], Customer cus){
 	list_events(events, cus);
 }
 
+// Printing out all ticket holders at the end of the Program.
 void print_ticketHolders(Event events[]){
 	int i, j;
 	for(i = 0; i < sizeof(events); i++){
