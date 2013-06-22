@@ -1,18 +1,17 @@
-// WindowedProjectTest.cpp : Defines the entry point for the application.
+// MyGuiProject.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"
-#include "WindowedProjectTest.h"
+#include "MyGuiProject.h"
 
 #define MAX_LOADSTRING 100
-
-using namespace std;
-
 
 // Global Variables:
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
+
+HWND hButton; // My Button!
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -34,7 +33,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	// Initialize global strings
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-	LoadString(hInstance, IDC_WINDOWEDPROJECTTEST, szWindowClass, MAX_LOADSTRING);
+	LoadString(hInstance, IDC_MYGUIPROJECT, szWindowClass, MAX_LOADSTRING);
 	MyRegisterClass(hInstance);
 
 	// Perform application initialization:
@@ -43,7 +42,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		return FALSE;
 	}
 
-	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINDOWEDPROJECTTEST));
+	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MYGUIPROJECT));
 
 	// Main message loop:
 	while (GetMessage(&msg, NULL, 0, 0))
@@ -76,10 +75,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.cbClsExtra		= 0;
 	wcex.cbWndExtra		= 0;
 	wcex.hInstance		= hInstance;
-	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_WINDOWEDPROJECTTEST));
+	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MYGUIPROJECT));
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
-	wcex.lpszMenuName	= MAKEINTRESOURCE(IDC_WINDOWEDPROJECTTEST);
+	wcex.lpszMenuName	= MAKEINTRESOURCE(IDC_MYGUIPROJECT);
 	wcex.lpszClassName	= szWindowClass;
 	wcex.hIconSm		= LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -134,6 +133,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+	case WM_CREATE:
+			hButton = CreateWindow(_T("Button"), _T("Button"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			10, 10, 100, 30, hWnd, (HMENU)1, hInst, NULL);
+			break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
@@ -152,14 +155,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-			// TODO: Add any drawing code here...
-		{
-			welcome::sayHello(hdc);
-
-			HWND MyButton = CreateWindow(TEXT("button"), TEXT("Click Here"),
-							 WS_VISIBLE | WS_CHILD | , 100, 100, 100, 100, HWND, (HMENU) 1, NULL, NULL);
-
-		}
+		// TODO: Add any drawing code here...
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
