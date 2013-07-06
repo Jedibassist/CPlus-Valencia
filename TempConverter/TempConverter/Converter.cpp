@@ -25,19 +25,26 @@ void main(){
 			cout << "Well that's silly isn't it? We don't need to convert that!" << endl;
 		}else{
 			tempToConvert = getTempToConvert(startingTempType);
-		}
 
-		convertedTemp = convertTemperature(startingTempType, endingTempType, tempToConvert,
-											&FahrenheitConverter, &CelsiusConverter, &KelvinConverter);
+			convertedTemp = convertTemperature(startingTempType, endingTempType, tempToConvert,
+												&FahrenheitConverter, &CelsiusConverter, &KelvinConverter);
 
-		cout << "Your final converted Temperature is: " << convertedTemp << endl;
+			cout << endl << "Your final converted Temperature is: " << convertedTemp << " Degrees "; 
+			if(endingTempType == 1)
+				cout << "Fahrenheit";
+			if(endingTempType == 2)
+				cout << "Celsius";
+			if(endingTempType == 3)
+				cout << "Kelvin";
+			cout << endl << endl;
 
-		cout << "Would you like to convert another temperature? (y/n)" << endl;
-		cin >> loop;
+			cout << "Would you like to convert another temperature? (y/n) ";
+			cin >> loop;
 
-		if(!(loop == 'y')){
-			cout << "Have a nice day!" << endl;
-			break;
+			if(!(loop == 'y')){
+				cout << "Have a nice day!" << endl;
+				break;
+			}
 		}
 	}
 
@@ -92,7 +99,7 @@ int endingTempChoice(){
 double getTempToConvert(int tempType){
 	double choice;
 
-	cout << "What temperature are we converting?" << endl;
+	cout << "What temperature are we converting: ";
 
 	// Get input and validate.
 	while(true) {
